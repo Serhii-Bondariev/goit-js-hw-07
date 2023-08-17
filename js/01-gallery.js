@@ -1,4 +1,73 @@
 import { galleryItems } from './gallery-items.js';
-// Change code below this line
 
-console.log(galleryItems);
+const galleryContainer = document.querySelector('.gallery');
+
+const galleryMarkup = galleryItems
+  .map(
+    ({ preview, original, description }, index) =>
+      `<li class="gallery__item">
+         <a class="gallery__link" href="${original}">
+           <img
+             class="gallery__image"
+             src="${preview}"
+             data-source="${original}"
+             data-index="${index}"
+             alt="${description}"
+           />
+         </a>
+       </li>`
+  )
+  .join('');
+
+galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
+
+galleryContainer.addEventListener('click', handleGalleryItemClick);
+
+function handleGalleryItemClick(event) {
+  event.preventDefault();
+
+  const target = event.target;
+  if (target.classList.contains('gallery__image')) {
+    const source = target.dataset.source;
+    const index = Number(target.dataset.index);
+    openModal(source, index);
+  }
+}
+
+function openModal(source, index) {
+  const instance = basicLightbox.create(`
+    <img src="${source}" width="800" height="600">
+  `, {
+    onShow: () => {
+      document.addEventListener('keydown', handleKeyPress);
+    },
+    onClose: () => {
+      document.removeEventListener('keydown', handleKeyPress);
+    },
+  });
+
+  instance.show();
+
+  function handleKeyPress(event) {
+    if (event.key === 'Escape') {
+      instance.close();
+    } else {
+      const currentImageIndex = instance.element().querySelector('img').getAttribute('data-index');
+      const lastIndex = galleryItems.length - 1;
+
+      if (event.key === 'ArrowLeft' && currentImageIndex > 0) {
+        const prevIndex = Number(currentImageIndex) - 1;
+        instance.element().querySelector('img').src = galleryItems[prevIndex].original;
+        instance.element().querySelector('img').setAttribute('data-index', prevIndex);
+      } else if (event.key === 'ArrowRight' && currentImageIndex < lastIndex) {
+        const nextIndex = Number(currentImageIndex) + 1;
+        instance.element().querySelector('img').src = galleryItems[nextIndex].original;
+        instance.element().querySelector('img').setAttribute('data-index', nextIndex);
+      }
+
+      const counter = `${Number(currentImageIndex) + 1}/${galleryItems.length}`;
+      instance.element().querySelector('.basicLightbox__placeholder').innerText = counter;
+    }
+  }
+}
+
