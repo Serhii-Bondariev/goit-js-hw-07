@@ -54,19 +54,6 @@ function openModal(source, index) {
     } else {
       const currentImageIndex = instance.element().querySelector('img').getAttribute('data-index');
       const lastIndex = galleryItems.length - 1;
-
-      if (event.key === 'ArrowLeft' && currentImageIndex > 0) {
-        const prevIndex = Number(currentImageIndex) - 1;
-        instance.element().querySelector('img').src = galleryItems[prevIndex].original;
-        instance.element().querySelector('img').setAttribute('data-index', prevIndex);
-      } else if (event.key === 'ArrowRight' && currentImageIndex < lastIndex) {
-        const nextIndex = Number(currentImageIndex) + 1;
-        instance.element().querySelector('img').src = galleryItems[nextIndex].original;
-        instance.element().querySelector('img').setAttribute('data-index', nextIndex);
-      }
-
-      const counter = `${Number(currentImageIndex) + 1}/${galleryItems.length}`;
-      instance.element().querySelector('.basicLightbox__placeholder').innerText = counter;
     }
   }
 }
