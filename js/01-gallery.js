@@ -1,6 +1,6 @@
-import { galleryItems } from './gallery-items.js';
+import { galleryItems } from "./gallery-items.js";
 
-const galleryContainer = document.querySelector('.gallery');
+const galleryContainer = document.querySelector(".gallery");
 
 const galleryMarkup = galleryItems
   .map(
@@ -17,17 +17,17 @@ const galleryMarkup = galleryItems
          </a>
        </li>`
   )
-  .join('');
+  .join("");
 
-galleryContainer.insertAdjacentHTML('beforeend', galleryMarkup);
+galleryContainer.insertAdjacentHTML("beforeend", galleryMarkup);
 
-galleryContainer.addEventListener('click', handleGalleryItemClick);
+galleryContainer.addEventListener("click", handleGalleryItemClick);
 
 function handleGalleryItemClick(event) {
   event.preventDefault();
 
   const target = event.target;
-  if (target.classList.contains('gallery__image')) {
+  if (target.classList.contains("gallery__image")) {
     const source = target.dataset.source;
     const index = Number(target.dataset.index);
     openModal(source, index);
@@ -35,26 +35,31 @@ function handleGalleryItemClick(event) {
 }
 
 function openModal(source, index) {
-  const instance = basicLightbox.create(`
+  const instance = basicLightbox.create(
+    `
     <img src="${source}" width="800" height="600">
-  `, {
-    onShow: () => {
-      document.addEventListener('keydown', handleKeyPress);
-    },
-    onClose: () => {
-      document.removeEventListener('keydown', handleKeyPress);
-    },
-  });
+  `,
+    {
+      onShow: () => {
+        document.addEventListener("keydown", handleKeyPress);
+      },
+      onClose: () => {
+        document.removeEventListener("keydown", handleKeyPress);
+      },
+    }
+  );
 
   instance.show();
 
   function handleKeyPress(event) {
-    if (event.key === 'Escape') {
+    if (event.key === "Escape") {
       instance.close();
     } else {
-      const currentImageIndex = instance.element().querySelector('img').getAttribute('data-index');
+      const currentImageIndex = instance
+        .element()
+        .querySelector("img")
+        .getAttribute("data-index");
       const lastIndex = galleryItems.length - 1;
     }
   }
 }
-
