@@ -16,5 +16,5 @@ return gallery.map(item => {
 
 gallery.insertAdjacentHTML('beforeend', murkup(galleryItems));
 console.log(murkup(galleryItems));
- const lightbox = new SimpleLightbox('.gallery a', { /* options */ });
+ const lightbox = new SimpleLightbox('.gallery a', { captionDelay: 250, captionsData: 'alt', captionPosition: 'bottom'});
 
